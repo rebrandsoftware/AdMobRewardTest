@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.rebrandsoftware.admobrewardtest" versionCode="1" version="1.0.0">
+
+    <!-- versionCode is optional and Android only -->
+
+    <preference name="phonegap-version" value="cli-6.3.0" />
+    <preference name="splashScreenDelay" value="3000" />
+    <preference name="fullscreen" value="false" />
+    <preference name="android-installLocation" value="auto" />
+    <preference name="android-minSdkVersion" value="14" />
+    <preference name="android-targetSdkVersion" value="23" />
+
+    <name>AdMob Reward Test</name>
+
+    <description>
+        Test an interstitial reward video with AdMob
+    </description>
+
+    <author href="http://www.rebrandsoftware.com" email="mike@rebrandsoftware.com">
+        Mike Gibson - Rebrand Software, LLC
+    </author>
+
+    <access origin="*" />
+   
+    <!-- AdMob and Mediation -->
+    <plugin name="cordova-plugin-admob-free" source="npm" />
+    <plugin spec="https://github.com/warcry2000/cordova-plugin-admob-mediation-adcolony.git" source="git" />
+    <plugin spec="https://github.com/rebrandsoftware/cordova-plugin-admob-mediation-inmobi.git" source="git" />
+</widget>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>
+         AdMob Reward Test
+      </title>
+      <!-- Include meta tag to ensure proper rendering and touch zooming -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Include jQuery Mobile stylesheets -->
+      <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+      <!-- Include the jQuery library -->
+      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <!-- Include the jQuery Mobile library -->
+      <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+      <!-- start phonegap  -->
+      <script type="text/javascript" src="phonegap.js"></script>
+      <!-- end phonegap  -->
+   </head>
+   <body>
+      <div data-role="page" id="home">
+         <div data-theme="a" data-role="header">
+            <h3>
+               AdMob Reward Test
+            </h3>
+         </div>
+         <div class="ui-content">
+            <div id="divEntryName" class="ui-field-contain">
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+               <h3>Options</h3>
+               <label for="adUnitId">
+               Ad Unit Id (Video):
+               </label>
+               <input type="text" id="adUnitId" placeholder="ca-app-pub-1135739188286423/86572827" value="ca-app-pub-1135739188249379/7180728402" />
+               <label>
+               <input type="checkbox" name="chkTesting" id="chkTesting" checked /> Testing
+               </label>
+               <label>
+               <input type="checkbox" name="chkAutoShow" id="chkAutoShow" checked /> AutoShow
+               </label>
+            </div>
+            <a data-role="button" data-icon="check" id="btnPrepareVideo">
+            Prepare Reward Video
+            </a>
+            <a data-role="button" data-theme="d" data-icon="eye" id="btnShowVideo">
+            Show Reward Video
+            </a>
+            <div id="debugDiv">Console Output:<BR></div>
+         </div>
+      </div>
+      <script type="text/javascript">
+         if (typeof console  != "undefined") 
+          if (typeof console.log != 'undefined')
+              console.olog = console.log;
+          else
+              console.olog = function() {};
+         
+         console.log = function(message) {
+          console.olog(message);
+          $('#debugDiv').append('<p>' + message + '</p>');
+         };
+         console.error = console.debug = console.info =  console.log;
+      </script>
+      <script type="text/javascript">
+         document.addEventListener('admob.rewardvideo.events.LOAD', function(event) {
+          console.log("[ADS]LOAD");
+         });
+         document.addEventListener('admob.rewardvideo.events.LOAD_FAIL', function(event) {
+          console.log("[ADS]LOAD_FAIL");
+         });
+         document.addEventListener('admob.rewardvideo.events.OPEN', function(event) {
+          console.log("[ADS]OPEN");
+         });
+         document.addEventListener('admob.rewardvideo.events.CLOSE', function(event) {
+          console.log("[ADS]CLOSE");
+         });
+         document.addEventListener('admob.rewardvideo.events.EXIT_APP', function(event) {
+          console.log("[ADS]EXITAPP");
+         });
+         document.addEventListener('admob.rewardvideo.events.START', function(event) {
+          console.log("[ADS]START");
+         });
+         document.addEventListener('admob.rewardvideo.events.REWARD', function(event) {
+          console.log("[ADS]REWARD - give reward after this fires?");
+          Ads.giveReward();
+         });
+         
+         
+         var Ads = {
+          prepareRewardVideo: function(adUnitId, bTesting, bAutoShow, callback) {
+          	console.log("[ADS]prepareRewardVideo " + adUnitId + " testing: " + bTesting + " autoShow: " + bAutoShow);
+          		admob.rewardvideo.config({
+                   id: adUnitId,
+                   isTesting: bTesting,
+                   autoShow: bAutoShow
+               });
+         
+               admob.rewardvideo.prepare();	
+               callback();	    		
+         
+          },
+          showRewardVideo: function(callback) {
+              console.log("[ADS]showRewardVideo");
+         
+         admob.rewardvideo.show();
+              	callback();	
+         
+          },
+          
+          giveReward: function() {
+          	console.log("[ADS]giveReward");
+          	console.log("AWARD GIVEN!");
+          },
+          initialize: function() {
+          	console.log("[ADS]initialize");
+         
+              $('#btnPrepareVideo').on('click', function() {
+                  console.log("clicked prepare reward button");
+                  var adUnitId = $('#adUnitId').val();
+               var bTesting;
+               if ($('#chkTesting').is(":checked")) {
+                   bTesting = true;
+               } else {
+                   bTesting = false;
+               }
+               var bAutoShow;
+               if ($('#chkAutoShow').is(":checked")) {
+                   bAutoShow = true;
+               } else {
+                   bAutoShow = false;
+               }
+               if (adUnitId !== "") {
+               	Ads.prepareRewardVideo(adUnitId, bTesting, bAutoShow, function() {
+                       console.log("reward preparing");
+                   });	
+               } else {
+               	alert("Please enter a video ad unit id");
+               	console.log("No ad unit entered");
+               }
+              });
+         
+              $('#btnShowVideo').on('click', function() {
+                  console.log("clicked show reward button");
+                  Ads.showRewardVideo(function() {
+                      console.log("reward shown");
+                  });
+              });
+         
+         
+          }
+         };
+         
+         Ads.initialize();
+      </script>
+   </body>
+</html>
